@@ -5,7 +5,7 @@ export const api = axios.create({
   withCredentials: true
 })
 
-const enableApiDelay = true
+const enableApiDelay = false
 
 if (enableApiDelay) {
   api.interceptors.request.use(async config => {

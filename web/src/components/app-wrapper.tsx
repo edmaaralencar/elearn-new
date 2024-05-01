@@ -22,8 +22,6 @@ export function AppWrapper({ items, allowedRoles }: AppWrapperProps) {
 
   const { data: profile } = useProfile()
 
-  console.log(profile?.role, allowedRoles)
-
   useLayoutEffect(() => {
     setIsLoading(true)
     const interceptorId = api.interceptors.response.use(
@@ -77,7 +75,7 @@ export function AppWrapper({ items, allowedRoles }: AppWrapperProps) {
   return (
     <main className="flex flex-col">
       <Header />
-      <div className="grid h-full w-full md:grid-cols-[190px_1fr] lg:grid-cols-[260px_1fr]">
+      <div className="grid h-full w-full md:grid-cols-[190px_1fr]">
         <Sidebar items={items} />
         <section className="h-full w-full overflow-y-scroll p-8">
           <Outlet />

@@ -9,7 +9,11 @@ import { AdminLayout } from './pages/_layouts/admin'
 import { TeachersLayout } from './pages/_layouts/teachers'
 import { TeachersHome } from './pages/teachers'
 import { TeachersCourses } from './pages/teachers/courses'
-import { CreateCourse } from './pages/teachers/create-course'
+import { EditCourse } from './pages/teachers/edit-course'
+import { AppCourses } from './pages/app/courses'
+import { AppCourse } from './pages/app/course'
+import { AppModule } from './pages/app/module'
+import { AppLesson } from './pages/app/lesson'
 
 export const router = createBrowserRouter([
   {
@@ -35,8 +39,24 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        path: '*',
+        path: '/app',
         element: <AppHome />
+      },
+      {
+        path: '/app/courses',
+        element: <AppCourses />
+      },
+      {
+        path: '/app/courses/:id',
+        element: <AppCourse />
+      },
+      {
+        path: '/app/modules/:id',
+        element: <AppModule />
+      },
+      {
+        path: '/app/modules/:id/lessons/:slug',
+        element: <AppLesson />
       }
     ]
   },
@@ -63,8 +83,8 @@ export const router = createBrowserRouter([
         element: <TeachersCourses />
       },
       {
-        path: '/teachers/courses/create',
-        element: <CreateCourse />
+        path: '/teachers/courses/:id',
+        element: <EditCourse />
       }
     ]
   }

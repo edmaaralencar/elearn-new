@@ -12,7 +12,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { LogOut, Settings, User } from 'lucide-react'
+import {
+  LayoutDashboard,
+  LogOut,
+  Pen,
+  Settings,
+  User,
+  User2
+} from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useProfile } from '@/api/hooks/use-profile'
 
@@ -72,6 +79,59 @@ export function UserMenu() {
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
+
+        {profile?.role !== 'USER' && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              asChild
+              className="flex flex-row gap-2 items-center p-2"
+            >
+              <Link to="/app/">
+                <User2 className="w-6 h-6" />
+
+                <div className="flex flex-col">
+                  <span className="text-sm">Visão do Usuário</span>
+                  <span className="text-muted-foreground text-xs">
+                    Acesse a dashboard do usuário
+                  </span>
+                </div>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              asChild
+              className="flex flex-row gap-2 items-center p-2"
+            >
+              <Link to="/teachers">
+                <Pen className="w-6 h-6" />
+
+                <div className="flex flex-col">
+                  <span className="text-sm">Visão do Professor</span>
+                  <span className="text-muted-foreground text-xs">
+                    Acesse a dashboard de professor
+                  </span>
+                </div>
+              </Link>
+            </DropdownMenuItem>
+          </>
+        )}
+        {profile?.role === 'ADMIN' && (
+          <DropdownMenuItem
+            asChild
+            className="flex flex-row gap-2 items-center p-2"
+          >
+            <Link to="/admin">
+              <LayoutDashboard className="w-6 h-6" />
+
+              <div className="flex flex-col">
+                <span className="text-sm">Visão de Administrador</span>
+                <span className="text-muted-foreground text-xs">
+                  Acesse a dashboard de administrador
+                </span>
+              </div>
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="flex flex-row gap-2 items-center p-2"

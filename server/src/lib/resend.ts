@@ -6,7 +6,7 @@ export const domain = 'http://localhost:3000'
 
 export const verifyEmailHtml = ({
   code,
-  url,
+  url
 }: {
   code: number
   url: string

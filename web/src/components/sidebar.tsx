@@ -18,7 +18,7 @@ export function Sidebar({ items }: SidebarProps) {
   return (
     <div
       className={cn(
-        'border-r border-muted hidden h-[calc(100vh-96px)] md:block md:w-[190px] lg:w-[260px]',
+        'border-r border-muted hidden h-[calc(100vh-80px)] md:block w-[190px]',
         isOpen ? 'block w-72' : 'hidden'
       )}
     >

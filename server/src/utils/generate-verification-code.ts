@@ -23,7 +23,7 @@ export async function generateVerificationCode(email: string) {
     .values({
       code,
       email,
-      expires_at: formatDateToSqlite(expires),
+      expires_at: formatDateToSqlite(expires)
     })
     .returningAll()
     .executeTakeFirstOrThrow()
