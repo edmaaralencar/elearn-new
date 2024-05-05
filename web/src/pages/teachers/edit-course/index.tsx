@@ -23,6 +23,8 @@ export function EditCourse() {
 
   const { data } = useCourse(params.id ?? '')
 
+  console.log(data)
+
   return (
     <div className="flex flex-col gap-8">
       {!data ? (
@@ -52,8 +54,8 @@ export function EditCourse() {
             {selectedSection === 'general' && (
               <GeneralSection
                 initialData={{
-                  description: data?.course.description,
-                  title: data?.course.title,
+                  description: data.course?.description,
+                  title: data.course.title,
                   id: String(params.id)
                 }}
               />

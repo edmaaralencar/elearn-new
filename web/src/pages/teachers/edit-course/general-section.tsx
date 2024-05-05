@@ -9,9 +9,8 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { queryClient } from '@/lib/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -32,6 +31,8 @@ type GeneralSectionProps = {
 }
 
 export function GeneralSection({ initialData }: GeneralSectionProps) {
+  const queryClient = useQueryClient()
+
   const form = useForm<FormInput>({
     resolver: zodResolver(saveGeneralDataFormSchema),
     defaultValues: {

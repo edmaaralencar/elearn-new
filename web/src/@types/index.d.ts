@@ -38,3 +38,11 @@ export interface IModule {
   course_id: number
   slug: string
 }
+
+export interface IUserProgress {
+  course_id: number
+  id: number
+  is_completed: number
+  lesson_id: number
+  user_id: number
+}

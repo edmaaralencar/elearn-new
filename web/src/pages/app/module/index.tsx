@@ -1,6 +1,8 @@
-import { useChaptersByModule } from '@/api/hooks/use-chapters-by-module'
-import { Loading } from '@/components/ui/loading'
 import { useParams, Navigate } from 'react-router-dom'
+
+import { useChaptersByModule } from '@/api/hooks/use-chapters-by-module'
+
+import { Loading } from '@/components/ui/loading'
 
 export function AppModule() {
   const params = useParams<{ id: string }>()
@@ -30,6 +32,7 @@ export function AppModule() {
   return (
     <Navigate
       to={`/app/modules/${params.id}/lessons/${data.chapters[0].lessons[0].slug}`}
+      replace
     />
   )
 }

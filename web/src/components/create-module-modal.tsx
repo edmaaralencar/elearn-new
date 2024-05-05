@@ -25,8 +25,7 @@ import { toast } from 'sonner'
 import { useParams } from 'react-router-dom'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 import { createModule } from '@/api/create-module'
-import { useMutation } from '@tanstack/react-query'
-import { queryClient } from '@/lib/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 
 const createModuleFormSchema = z.object({
@@ -44,6 +43,7 @@ type FormInput = z.infer<typeof createModuleFormSchema>
 export function CreateModuleModal() {
   const params = useParams<{ id: string }>()
   const [isOpen, setIsOpen] = useState(false)
+  const queryClient = useQueryClient()
 
   const form = useForm<FormInput>({
     resolver: zodResolver(createModuleFormSchema),
@@ -85,15 +85,15 @@ export function CreateModuleModal() {
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2">
           <PlusCircle className="w-4 h-4" />
-          Novo Curso
+          Novo Módulo
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Crie um curso</DialogTitle>
+          <DialogTitle>Crie um módulo</DialogTitle>
           <DialogDescription>
-            Defina o nome e o tipo do curso e você será redirecionado para uma
-            tela para finalizar a criação do curso.
+            Defina o nome, descrição e tipo do módulo e o seu novo módulo será
+            criado.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

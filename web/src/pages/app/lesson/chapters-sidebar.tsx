@@ -1,4 +1,5 @@
 import { useChaptersByModule } from '@/api/hooks/use-chapters-by-module'
+import { useProgressByCourse } from '@/api/hooks/use-progress-by-course'
 import {
   Accordion,
   AccordionContent,
@@ -6,6 +7,8 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion'
 import { Loading } from '@/components/ui/loading'
+import { cn } from '@/lib/utils'
+import { formatSeconds } from '@/utils/format-seconds'
 import { Video } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 
@@ -13,6 +16,7 @@ export function ChaptersSidebar() {
   const params = useParams<{ id: string; lesson: string }>()
 
   const { data } = useChaptersByModule(params.id ?? '')
+  const { data: progress } = useProgressByCourse(params.id ?? '')
 
   if (!data) {
     return <Loading />
@@ -30,12 +34,7 @@ export function ChaptersSidebar() {
           collapsible
           className="w-full flex flex-col gap-4 mt-6"
         >
-          {[
-            ...data.chapters,
-            ...data.chapters,
-            ...data.chapters,
-            ...data.chapters
-          ].map(item => (
+          {data.chapters.map(item => (
             <AccordionItem key={item.id} value={item.id.toString()}>
               <AccordionTrigger className="">
                 <div className="w-8 h-8 grid place-items-center text-xs bg-muted/80 rounded-full">
@@ -56,14 +55,29 @@ export function ChaptersSidebar() {
                       to={`/app/modules/${params.id}/lessons/${lesson.slug}`}
                       key={lesson.id + lesson.slug}
                     >
-                      <div className="flex gap-2 items-center">
+                      <div
+                        className={cn(
+                          'flex gap-2 items-center',
+                          progress?.find(item => item.lesson_id === lesson.id)
+                            ?.is_completed
+                            ? 'text-emerald-700'
+                            : 'text-white'
+                        )}
+                      >
                         <Video className="w-4 h-4" />
                         <h4>{lesson.title}</h4>
                       </div>
 
-                      <span className="text-sm text-muted-foreground">
-                        {/* 00:01:43 */}
-                        {lesson.duration}
+                      <span
+                        className={cn(
+                          'text-sm text-muted-foreground',
+                          progress?.find(item => item.lesson_id === lesson.id)
+                            ?.is_completed
+                            ? 'text-emerald-800'
+                            : 'text-muted-foreground'
+                        )}
+                      >
+                        {formatSeconds(lesson.duration)}
                       </span>
                     </Link>
                   ))}

@@ -22,8 +22,6 @@ import { registerUser } from './routes/auth/register-user'
 import { signOut } from './routes/auth/sign-out'
 import { updateCourse } from './routes/courses/update-course'
 import { validateVerificationCode } from './routes/auth/validate-verification-code'
-import { createRouteHandler } from 'uploadthing/fastify'
-import { uploadRouter } from './lib/uploadthing'
 import { deleteChapter } from './routes/chapters/delete-chapter'
 import { createLesson } from './routes/lessons/create-lesson'
 import { reorderList } from './routes/reorder-list'
@@ -37,6 +35,8 @@ import { createModule } from './routes/modules/create-module'
 import { deleteModule } from './routes/modules/delete-module'
 import { getCourseDetails } from './routes/courses/get-course-details'
 import { getLesson } from './routes/lessons/get-lesson'
+import { saveUserProgress } from './routes/users-progress/save-user-progress'
+import { getUserProgressByCourse } from './routes/users-progress/get-user-progress-by-course'
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -113,14 +113,8 @@ app.register(reorderList)
 app.register(uploadVideoAttachment)
 app.register(uploadImageAttachment)
 
-app.register(createRouteHandler, {
-  router: uploadRouter,
-  config: {
-    uploadthingId: env.UPLOADTHING_APP_ID,
-    uploadthingSecret: env.UPLOADTHING_SECRET,
-    isDev: true
-  }
-})
+app.register(saveUserProgress)
+app.register(getUserProgressByCourse)
 
 app.setErrorHandler(errorHandler)
 

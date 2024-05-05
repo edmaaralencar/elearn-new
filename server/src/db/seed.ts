@@ -119,6 +119,7 @@ async function seedDatabase() {
       course_id: course.id,
       name: 'Iniciando com React.js',
       position: 0,
+      is_published: 0,
       module_id: module.id,
       slug: createSlugFromText('Iniciando com React.js')
     })
@@ -130,6 +131,7 @@ async function seedDatabase() {
     .values({
       course_id: course.id,
       name: 'Estrutura da aplicação',
+      is_published: 0,
       position: 0,
       module_id: module.id,
       slug: createSlugFromText('Estrutura da aplicação')

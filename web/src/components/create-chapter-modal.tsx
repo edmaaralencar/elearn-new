@@ -24,8 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { useParams } from 'react-router-dom'
 import { createChapter } from '@/api/create-chapter'
-import { useMutation } from '@tanstack/react-query'
-import { queryClient } from '@/lib/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { IModule } from '@/@types'
 import {
@@ -50,6 +49,7 @@ type CreateChapterModalProps = {
 }
 
 export function CreateChapterModal({ modules }: CreateChapterModalProps) {
+  const queryClient = useQueryClient()
   const params = useParams<{ id: string }>()
   const [isOpen, setIsOpen] = useState(false)
 

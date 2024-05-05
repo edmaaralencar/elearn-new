@@ -10,5 +10,6 @@ export const queryKeys = {
   courseDetails: (courseId: string) => ['courses', courseId, 'details'],
   chaptersByModule: (moduleId: string) => ['modules', moduleId, 'chapters'],
   modulesByCourse: (courseId: string) => ['modules', 'course', courseId],
-  lesson: (slug: string) => ['lessons', slug]
+  lesson: (slug: string) => ['lessons', slug],
+  progressByCourse: (lessonId: string) => ['progress', lessonId]
 }

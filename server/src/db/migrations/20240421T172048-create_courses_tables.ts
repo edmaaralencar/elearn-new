@@ -12,7 +12,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('coverImage', 'text')
     .addColumn('technology', 'text', col => col.notNull())
     .addColumn('slug', 'text', col => col.notNull())
-    .addColumn('is_published', 'boolean', col => col.defaultTo(false).notNull())
+    .addColumn('is_published', 'boolean', col => col.notNull())
     .addColumn('created_by', 'integer', col =>
       col.references('users.id').onDelete('cascade').notNull()
     )
@@ -26,6 +26,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('name', 'text', col => col.notNull())
     .addColumn('position', 'integer', col => col.notNull())
     .addColumn('slug', 'text', col => col.notNull())
+    .addColumn('is_published', 'boolean', col => col.notNull())
     .addColumn('course_id', 'integer', col =>
       col.references('courses.id').onDelete('cascade').notNull()
     )
@@ -65,6 +66,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     )
     .addColumn('title', 'text', col => col.notNull())
     .addColumn('description', 'text', col => col.notNull())
+    .addColumn('is_published', 'boolean', col => col.defaultTo(false).notNull())
     .addColumn('type', 'text', col => col.notNull())
     .addColumn('slug', 'text', col => col.notNull())
     .addColumn('course_id', 'integer', col =>

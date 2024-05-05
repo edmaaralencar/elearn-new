@@ -27,7 +27,8 @@ export async function getLesson(app: FastifyInstance) {
               video_url: z.string(),
               slug: z.string(),
               duration: z.number()
-            })
+            }),
+            nextLesson: z.string().nullable()
           })
         }
       }
@@ -45,11 +46,18 @@ export async function getLesson(app: FastifyInstance) {
         throw new BadRequest('Lesson does not exists.')
       }
 
+      const nextLesson = await db
+        .selectFrom('lessons')
+        .select('slug')
+        .where('position', '==', lesson.position + 1)
+        .executeTakeFirst()
+
       return reply.status(200).send({
         lesson: {
           ...lesson,
           duration: Number(lesson.duration)
-        }
+        },
+        nextLesson: nextLesson?.slug ?? null
       })
     }
   )

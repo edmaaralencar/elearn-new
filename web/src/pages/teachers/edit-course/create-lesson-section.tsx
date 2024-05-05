@@ -28,9 +28,9 @@ import {
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { IChapter } from '@/@types'
 import { cn } from '@/lib/utils'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLesson } from '@/api/create-lesson'
-import { queryClient } from '@/lib/react-query'
+import { queryKeys } from '@/lib/react-query'
 import { useParams } from 'react-router-dom'
 import { VideoFileInput } from './video-file-input'
 import { toast } from 'sonner'
@@ -43,7 +43,6 @@ type CreateLessonSectionProps = {
 const createLessonFormSchema = z.object({
   name: z.string().min(1, { message: 'Nome da aula obrigatório.' }),
   description: z.string().min(1, { message: 'Descrição obrigatória.' }),
-  // videoUrl: z.string().min(1, { message: 'Vídeo da aula obrigatório.' }),
   video: z.object(
     {
       url: z.string(),
@@ -63,6 +62,7 @@ export function CreateLessonSection({
   chapters
 }: CreateLessonSectionProps) {
   const params = useParams<{ id: string }>()
+  const queryClient = useQueryClient()
 
   const form = useForm<FormInput>({
     resolver: zodResolver(createLessonFormSchema),
@@ -78,10 +78,12 @@ export function CreateLessonSection({
     mutationFn: createLesson,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['courses', Number(params.id)]
+        queryKey: queryKeys.course(params.id ?? '')
       })
 
       toast.success('Aula criada com sucesso.')
+
+      onSelectSection('lessons')
     }
   })
 

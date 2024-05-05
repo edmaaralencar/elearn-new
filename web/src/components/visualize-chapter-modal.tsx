@@ -25,8 +25,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { useParams } from 'react-router-dom'
 import { createChapter } from '@/api/create-chapter'
-import { useMutation } from '@tanstack/react-query'
-import { queryClient } from '@/lib/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ComponentRef, useEffect, useRef, useState } from 'react'
 import { IChapter, ILesson } from '@/@types'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
@@ -39,8 +38,7 @@ import {
 import { cn } from '@/lib/utils'
 
 const createChapterFormSchema = z.object({
-  name: z.string().min(1, { message: 'Título do curso obrigatório.' }),
-  description: z.string().min(1, { message: 'Descrição do curso obrigatório.' })
+  name: z.string().min(1, { message: 'Título do curso obrigatório.' })
 })
 
 type FormInput = z.infer<typeof createChapterFormSchema>
@@ -55,15 +53,16 @@ export function VisualizeChapterModal({
   lessons: initialLessons
 }: VisualizeChapterModalProps) {
   const params = useParams<{ id: string }>()
+  const queryClient = useQueryClient()
   const modalRef = useRef<ComponentRef<'div'>>(null)
+
   const [isOpen, setIsOpen] = useState(false)
   const [lessons, setLessons] = useState(initialLessons)
 
   const form = useForm<FormInput>({
     resolver: zodResolver(createChapterFormSchema),
     defaultValues: {
-      name: chapter.name ?? '',
-      description: chapter.description ?? ''
+      name: chapter.name ?? ''
     }
   })
 
@@ -84,8 +83,8 @@ export function VisualizeChapterModal({
     try {
       await createChapterMutation.mutateAsync({
         course_id: Number(params.id),
-        description: values.description,
-        name: values.name
+        name: values.name,
+        module_id: chapter.module_id
       })
 
       toast.success('Capítulo criado com sucesso.')
@@ -165,19 +164,6 @@ export function VisualizeChapterModal({
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Descrição</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Descrição" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <DialogFooter>
                   <Button isLoading={form.formState.isSubmitting} type="submit">
                     Criar
@@ -218,7 +204,6 @@ export function VisualizeChapterModal({
                                   'flex items-center gap-x-2 border bg-muted/30 rounded-md mb-5 text-sm'
                                 )}
                                 ref={provided.innerRef}
-                                // {...provided.draggableProps}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                                 style={{

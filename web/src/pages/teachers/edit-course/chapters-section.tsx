@@ -30,7 +30,7 @@ export function ChaptersSection({ initialData }: ChaptersSectionProps) {
         <Accordion
           type="single"
           collapsible
-          className="w-full flex flex-col gap-4 mt-6"
+          className="w-full flex flex-col gap-4"
         >
           {initialData.modules.map(module => (
             <ChapterAccordion

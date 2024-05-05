@@ -9,8 +9,7 @@ import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { DeleteModal } from '@/components/delete-modal'
-import { useMutation } from '@tanstack/react-query'
-import { queryClient } from '@/lib/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { IModule } from '@/@types'
@@ -27,6 +26,7 @@ type ModulesSectionProps = {
 export function ModulesSection({ initialData }: ModulesSectionProps) {
   const [modules, setModules] = useState<IModule[]>([])
   const params = useParams<{ id: string }>()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     setModules([...initialData.modules.sort((a, b) => a.position - b.position)])
@@ -109,7 +109,7 @@ export function ModulesSection({ initialData }: ModulesSectionProps) {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="w-full"
+                className="w-full -mb-4"
               >
                 {modules.map((module, index) => (
                   <Draggable

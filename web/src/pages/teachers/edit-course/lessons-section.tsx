@@ -3,10 +3,9 @@ import { Button } from '@/components/ui/button'
 import { PlusCircle, Trash } from 'lucide-react'
 import { ILesson } from '@/@types'
 import { DeleteModal } from '@/components/delete-modal'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteLesson } from '@/api/delete-lesson'
 import { toast } from 'sonner'
-import { queryClient } from '@/lib/react-query'
 import { useParams } from 'react-router-dom'
 
 type LessonsSectionProps = {
@@ -21,6 +20,7 @@ export function LessonsSection({
   initialData
 }: LessonsSectionProps) {
   const params = useParams<{ id: string }>()
+  const queryClient = useQueryClient()
 
   const deleteLessonMutation = useMutation({
     mutationFn: deleteLesson,
@@ -56,10 +56,10 @@ export function LessonsSection({
         </Button>
       </div>
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-4">
         {initialData.lessons.map(item => (
           <div
-            className="flex items-center justify-between border bg-muted/30 rounded-md mb-4 text-sm py-2 px-4"
+            className="flex items-center justify-between border bg-muted/30 rounded-md text-sm py-2 px-4"
             key={item.id}
           >
             <span className="text-sm">{item.title}</span>

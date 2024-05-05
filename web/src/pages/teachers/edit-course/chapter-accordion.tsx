@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import { VisualizeChapterModal } from '@/components/visualize-chapter-modal'
-import { queryClient } from '@/lib/react-query'
 import { cn } from '@/lib/utils'
 import {
   DragDropContext,
@@ -17,7 +16,7 @@ import {
   DropResult,
   Droppable
 } from '@hello-pangea/dnd'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Grip, Trash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -38,6 +37,7 @@ export function ChapterAccordion({
 }: ChapterAccordionProps) {
   const [chapters, setChapters] = useState<IChapter[]>([])
   const params = useParams()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     setChapters([...initialChapters.sort((a, b) => a.position - b.position)])
@@ -105,7 +105,7 @@ export function ChapterAccordion({
         <span className="font-medium">{moduleTitle}</span>
       </AccordionTrigger>
       <AccordionContent>
-        <div className="p-4">
+        <div className="-mb-4 p-4">
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="chapters">
               {provided => (

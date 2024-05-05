@@ -64,6 +64,7 @@ export async function createChapter(app: FastifyInstance) {
           name,
           course_id,
           position,
+          is_published: 0,
           module_id,
           slug: createSlugFromText(name)
         })
