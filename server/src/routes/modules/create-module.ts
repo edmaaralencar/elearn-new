@@ -43,6 +43,16 @@ export async function createModule(app: FastifyInstance) {
         throw new BadRequest('You are not the creator of this course.')
       }
 
+      const modules = await db
+        .selectFrom('modules')
+        .select('position')
+        .execute()
+
+      const position =
+        modules.length === 0
+          ? 0
+          : Math.max(...modules.map(item => item.position ?? 0)) + 1
+
       const module = await db
         .insertInto('modules')
         .values({
@@ -50,7 +60,9 @@ export async function createModule(app: FastifyInstance) {
           title,
           description,
           slug: createSlugFromText(title),
-          type
+          type,
+          is_published: 0,
+          position
         })
         .returning('id')
         .executeTakeFirstOrThrow()

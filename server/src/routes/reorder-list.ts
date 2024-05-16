@@ -24,7 +24,7 @@ export async function reorderList(app: FastifyInstance) {
               position: z.number()
             })
           ),
-          type: z.enum(['CHAPTER', 'LESSON']),
+          type: z.enum(['MODULE', 'LESSON']),
           courseId: z.number()
         }),
         response: {
@@ -44,10 +44,10 @@ export async function reorderList(app: FastifyInstance) {
         throw new BadRequest('You are not the creator of this course.')
       }
 
-      if (type === 'CHAPTER') {
+      if (type === 'MODULE') {
         for (const item of list) {
           await db
-            .updateTable('chapters')
+            .updateTable('modules')
             .where('id', '==', item.id)
             .set({
               position: item.position

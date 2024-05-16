@@ -25,7 +25,7 @@ export function Sidebar({ items }: SidebarProps) {
       <button className="block px-8 pt-6 md:hidden">
         <X className="w-6 h-6 text-white" />
       </button>
-      <div className="flex flex-col gap-3 px-4 py-8">
+      <div className="flex flex-col gap-2 px-4 py-6">
         {items.map(item => (
           <Link
             key={item.label}

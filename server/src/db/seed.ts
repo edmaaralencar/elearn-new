@@ -108,51 +108,12 @@ async function seedDatabase() {
         'Nesse módulo, criaremos uma aplicação React utilizando o Vite e aprenderemos sobre os conceitos mais importantes do React, entre eles estão componentização, propriedades, estados, imutabilidade e hooks, além de aplicar o TypeScript no nosso projeto para adicionar tipagem estática à aplicação.',
       title: 'Iniciando com React.js',
       type: 'module',
-      slug: createSlugFromText('Iniciando com React.js')
+      slug: createSlugFromText('Iniciando com React.js'),
+      position: 0,
+      is_published: 0
     })
     .returning('id')
     .executeTakeFirstOrThrow()
-
-  const fundamentals = await db
-    .insertInto('chapters')
-    .values({
-      course_id: course.id,
-      name: 'Iniciando com React.js',
-      position: 0,
-      is_published: 0,
-      module_id: module.id,
-      slug: createSlugFromText('Iniciando com React.js')
-    })
-    .returningAll()
-    .executeTakeFirstOrThrow()
-
-  await db
-    .insertInto('chapters')
-    .values({
-      course_id: course.id,
-      name: 'Estrutura da aplicação',
-      is_published: 0,
-      position: 0,
-      module_id: module.id,
-      slug: createSlugFromText('Estrutura da aplicação')
-    })
-    .returningAll()
-    .executeTakeFirstOrThrow()
-
-  // await db
-  //   .insertInto('lessons')
-  //   .values({
-  //     course_id: course.id,
-  //     asset_id: '',
-  //     chapter_id: fundamentals.id,
-  //     description: 'aeiojdaoijda',
-  //     playback_id: '',
-  //     position: 0,
-  //     slug: createSlugFromText('Introdução'),
-  //     title: 'Introdução',
-  //     video_url: ''
-  //   })
-  //   .executeTakeFirstOrThrow()
 }
 
 seedDatabase()

@@ -15,7 +15,7 @@ export function AdminLayout() {
     },
     {
       label: 'Professores',
-      pathname: '/admin/courses',
+      pathname: '/admin/teachers',
       Icon: User
     },
     {

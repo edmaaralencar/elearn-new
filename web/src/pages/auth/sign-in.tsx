@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { signIn } from '@/api/sign-in'
 import { isAxiosError } from 'axios'
 import { toast } from 'sonner'
@@ -26,6 +26,9 @@ type FormInput = z.infer<typeof signInFormSchema>
 
 export function SignIn() {
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+
+  console.log(params.get('redirect'))
 
   const form = useForm<FormInput>({
     resolver: zodResolver(signInFormSchema),
@@ -42,7 +45,13 @@ export function SignIn() {
         password: values.password
       })
 
-      navigate('/app')
+      const redirect = params.get('redirect')
+
+      if (redirect === 'checkout') {
+        navigate('/checkout')
+      } else {
+        navigate('/app')
+      }
     } catch (error) {
       if (isAxiosError(error)) {
         const message = error.response?.data.message
@@ -55,6 +64,12 @@ export function SignIn() {
 
         if (message === 'Invalid credentials') {
           return toast.error('Credenciais inválidas.')
+        }
+
+        if (message === 'User has not created a password yet.') {
+          return toast.error('Você ainda não definiu a senha para sua conta.', {
+            description: 'Por favor, cheque seu e-mail.'
+          })
         }
       }
     }

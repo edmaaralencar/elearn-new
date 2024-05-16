@@ -3,7 +3,7 @@ import { api } from '@/lib/axios'
 type Params = {
   title: string
   course_id: number
-  chapter_id: number
+  module_id: number
   description: string
   video_url: string
   duration: number
@@ -12,7 +12,7 @@ type Params = {
 export async function createLesson({
   course_id,
   description,
-  chapter_id,
+  module_id,
   title,
   video_url,
   duration
@@ -21,7 +21,7 @@ export async function createLesson({
     name,
     description,
     course_id,
-    chapter_id,
+    module_id,
     title,
     video_url,
     duration

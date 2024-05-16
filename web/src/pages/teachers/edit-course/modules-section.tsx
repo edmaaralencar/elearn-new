@@ -19,7 +19,7 @@ import { deleteModule } from '@/api/delete-module'
 
 type ModulesSectionProps = {
   initialData: {
-    modules: (IModule & { position: number })[]
+    modules: IModule[]
   }
 }
 
@@ -54,18 +54,18 @@ export function ModulesSection({ initialData }: ModulesSectionProps) {
     const startIndex = Math.min(result.source.index, result.destination.index)
     const endIndex = Math.max(result.source.index, result.destination.index)
 
-    const updatedChapters = items.slice(startIndex, endIndex + 1)
+    const updatedModules = items.slice(startIndex, endIndex + 1)
 
     setModules(items)
 
-    const bulkUpdateData = updatedChapters.map(chapter => ({
-      id: chapter.id,
-      position: items.findIndex(item => item.id === chapter.id)
+    const bulkUpdateData = updatedModules.map(module => ({
+      id: module.id,
+      position: items.findIndex(item => item.id === module.id)
     }))
 
     await reorderListMutation.mutateAsync({
       list: bulkUpdateData,
-      type: 'CHAPTER',
+      type: 'MODULE',
       courseId: Number(params.id)
     })
   }
@@ -94,8 +94,7 @@ export function ModulesSection({ initialData }: ModulesSectionProps) {
         <div className="space-y-2">
           <h2 className="text-xl font-medium">Módulos</h2>
           <span className="text-muted-foreground text-sm">
-            Os módulos são responsáveis pelo agrupamento de vários capítulos de
-            um curso.
+            Os módulos são responsáveis pelo agrupamento de aulas de um curso.
           </span>
         </div>
 
@@ -104,7 +103,7 @@ export function ModulesSection({ initialData }: ModulesSectionProps) {
 
       <div className="space-y-5 flex flex-col items-end">
         <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="chapters">
+          <Droppable droppableId="modules">
             {provided => (
               <div
                 {...provided.droppableProps}

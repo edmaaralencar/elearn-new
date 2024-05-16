@@ -1,15 +1,15 @@
-import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
+import { sql } from 'kysely'
 import { FastifyInstance } from 'fastify'
+import { ZodTypeProvider } from 'fastify-type-provider-zod'
+
 import { db } from '@/db'
 import { verifyJwt } from '@/middlewares/verify-jwt'
 import { BadRequest } from '@/errors/bad-request'
-import { verifyUserRole } from '@/middlewares/verify-user-role'
-import { sql } from 'kysely'
 
 export async function getModulesByCourse(app: FastifyInstance) {
   app.addHook('onRequest', verifyJwt)
-  app.addHook('onRequest', verifyUserRole('TEACHER'))
+  // app.addHook('onRequest', verifyUserRole('TEACHER'))
 
   app.withTypeProvider<ZodTypeProvider>().get(
     '/modules/courses/:id',

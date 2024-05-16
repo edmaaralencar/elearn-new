@@ -13,7 +13,6 @@ import {
 import { env } from './env'
 import { errorHandler } from './error-handler'
 import { authenticate } from './routes/auth/authenticate'
-import { createChapter } from './routes/chapters/create-chapter'
 import { createCourse } from './routes/courses/create-course'
 import { getCourse } from './routes/courses/get-course'
 import { getCoursesByTeacherid } from './routes/courses/get-courses-by-teacher-id'
@@ -22,14 +21,12 @@ import { registerUser } from './routes/auth/register-user'
 import { signOut } from './routes/auth/sign-out'
 import { updateCourse } from './routes/courses/update-course'
 import { validateVerificationCode } from './routes/auth/validate-verification-code'
-import { deleteChapter } from './routes/chapters/delete-chapter'
 import { createLesson } from './routes/lessons/create-lesson'
 import { reorderList } from './routes/reorder-list'
 import { uploadVideoAttachment } from './routes/attachments/upload-video'
 import { uploadImageAttachment } from './routes/attachments/upload-image'
 import { deleteLesson } from './routes/lessons/delete-lesson'
 import { getCourses } from './routes/courses/get-courses'
-import { getChaptersByModule } from './routes/chapters/get-chapters-by-module'
 import { getModulesByCourse } from './routes/modules/get-modules-by-course'
 import { createModule } from './routes/modules/create-module'
 import { deleteModule } from './routes/modules/delete-module'
@@ -37,6 +34,11 @@ import { getCourseDetails } from './routes/courses/get-course-details'
 import { getLesson } from './routes/lessons/get-lesson'
 import { saveUserProgress } from './routes/users-progress/save-user-progress'
 import { getUserProgressByCourse } from './routes/users-progress/get-user-progress-by-course'
+import { getLessonsByModule } from './routes/lessons/get-lessons-by-module'
+import { getTeachers } from './routes/auth/get-teachers'
+import { registerTeacher } from './routes/auth/register-teacher'
+import { finishTeacherRegistration } from './routes/auth/finish-teacher-registration'
+import { getSubscription } from './routes/subscriptions/get-subscription'
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -89,6 +91,9 @@ app.register(registerUser)
 app.register(authenticate)
 app.register(profile)
 app.register(signOut)
+app.register(getTeachers)
+app.register(registerTeacher)
+app.register(finishTeacherRegistration)
 
 app.register(validateVerificationCode)
 app.register(createCourse)
@@ -98,10 +103,6 @@ app.register(getCoursesByTeacherid)
 app.register(getCourses)
 app.register(getCourseDetails)
 
-app.register(createChapter)
-app.register(deleteChapter)
-app.register(getChaptersByModule)
-
 app.register(getModulesByCourse)
 app.register(createModule)
 app.register(deleteModule)
@@ -109,12 +110,16 @@ app.register(deleteModule)
 app.register(createLesson)
 app.register(deleteLesson)
 app.register(getLesson)
+app.register(getLessonsByModule)
+
 app.register(reorderList)
 app.register(uploadVideoAttachment)
 app.register(uploadImageAttachment)
 
 app.register(saveUserProgress)
 app.register(getUserProgressByCourse)
+
+app.register(getSubscription)
 
 app.setErrorHandler(errorHandler)
 

@@ -5,14 +5,14 @@ export const api = axios.create({
   withCredentials: true
 })
 
-const enableApiDelay = false
+// const enableApiDelay = false
 
-if (enableApiDelay) {
-  api.interceptors.request.use(async config => {
-    await new Promise(resolve =>
-      setTimeout(resolve, Math.round(Math.random() * 4000))
-    )
+// if (enableApiDelay) {
+//   api.interceptors.request.use(async config => {
+//     await new Promise(resolve =>
+//       setTimeout(resolve, Math.round(Math.random() * 4000))
+//     )
 
-    return config
-  })
-}
+//     return config
+//   })
+// }

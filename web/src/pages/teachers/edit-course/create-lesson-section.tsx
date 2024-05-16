@@ -26,7 +26,6 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
-import { IChapter } from '@/@types'
 import { cn } from '@/lib/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLesson } from '@/api/create-lesson'
@@ -34,10 +33,11 @@ import { queryKeys } from '@/lib/react-query'
 import { useParams } from 'react-router-dom'
 import { VideoFileInput } from './video-file-input'
 import { toast } from 'sonner'
+import { IModule } from '@/@types'
 
 type CreateLessonSectionProps = {
   onSelectSection: (section: Section) => void
-  chapters: IChapter[]
+  modules: IModule[]
 }
 
 const createLessonFormSchema = z.object({
@@ -52,14 +52,14 @@ const createLessonFormSchema = z.object({
       required_error: 'Vídeo da aula obrigatório.'
     }
   ),
-  chapterId: z.string().min(1, { message: 'Capítulo obrigatório.' })
+  moduleId: z.string().min(1, { message: 'Módulo obrigatório.' })
 })
 
 type FormInput = z.infer<typeof createLessonFormSchema>
 
 export function CreateLessonSection({
   onSelectSection,
-  chapters
+  modules
 }: CreateLessonSectionProps) {
   const params = useParams<{ id: string }>()
   const queryClient = useQueryClient()
@@ -67,7 +67,7 @@ export function CreateLessonSection({
   const form = useForm<FormInput>({
     resolver: zodResolver(createLessonFormSchema),
     defaultValues: {
-      chapterId: '',
+      moduleId: '',
       description: '',
       name: '',
       video: undefined
@@ -89,7 +89,7 @@ export function CreateLessonSection({
 
   async function onSubmit(values: FormInput) {
     await createLessonMutation.mutateAsync({
-      chapter_id: Number(values.chapterId),
+      module_id: Number(values.moduleId),
       course_id: Number(params.id),
       description: values.description,
       title: values.name,
@@ -98,9 +98,9 @@ export function CreateLessonSection({
     })
   }
 
-  const formattedChapters = chapters.map(item => ({
+  const formattedModules = modules.map(item => ({
     value: String(item.id),
-    label: String(item.name)
+    label: String(item.title)
   }))
 
   return (
@@ -152,10 +152,10 @@ export function CreateLessonSection({
           />
           <FormField
             control={form.control}
-            name="chapterId"
+            name="moduleId"
             render={({ field }) => (
               <FormItem className="flex flex-col w-full">
-                <FormLabel>Capítulo</FormLabel>
+                <FormLabel>Módulo</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -168,8 +168,8 @@ export function CreateLessonSection({
                         )}
                       >
                         {field.value
-                          ? formattedChapters.find(
-                              chapter => chapter.value === field.value
+                          ? formattedModules.find(
+                              module => module.value === field.value
                             )?.label
                           : 'Selecione um capítulo'}
                         <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -184,19 +184,19 @@ export function CreateLessonSection({
                       />
                       <CommandEmpty>Nenhum capítulo encontrado.</CommandEmpty>
                       <CommandGroup>
-                        {formattedChapters.map(chapter => (
+                        {formattedModules.map(module => (
                           <CommandItem
-                            value={chapter.label}
-                            key={chapter.value}
+                            value={module.label}
+                            key={module.value}
                             onSelect={() => {
-                              form.setValue('chapterId', chapter.value)
+                              form.setValue('moduleId', module.value)
                             }}
                           >
-                            {chapter.label}
+                            {module.label}
                             <CheckIcon
                               className={cn(
                                 'ml-auto h-4 w-4',
-                                chapter.value === field.value
+                                module.value === field.value
                                   ? 'opacity-100'
                                   : 'opacity-0'
                               )}

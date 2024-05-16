@@ -6,6 +6,7 @@ import { queryKeys } from '@/lib/react-query'
 export function useProfile() {
   return useQuery({
     queryKey: queryKeys.profile,
-    queryFn: getProfile
+    queryFn: getProfile,
+    staleTime: 1000 * 60 * 5
   })
 }

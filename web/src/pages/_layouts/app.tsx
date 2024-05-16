@@ -1,17 +1,23 @@
 import { AppWrapper } from '@/components/app-wrapper'
-import { Home, Video } from 'lucide-react'
+import { ChatBubbleIcon } from '@radix-ui/react-icons'
+import { LayoutDashboard, Video } from 'lucide-react'
 
 export function AppLayout() {
   const userItems = [
     {
       label: 'Início',
       pathname: '/app',
-      Icon: Home
+      Icon: LayoutDashboard
     },
     {
       label: 'Cursos',
       pathname: '/app/courses',
       Icon: Video
+    },
+    {
+      label: 'Fórum',
+      pathname: '/app/forums',
+      Icon: ChatBubbleIcon
     }
   ]
   return (

@@ -32,7 +32,7 @@ export function TeachersCourses() {
             <TableHead className="">Título</TableHead>
             <TableHead>Descrição</TableHead>
             <TableHead>Publicado</TableHead>
-            <TableHead>Capítulos</TableHead>
+            <TableHead>Módulos</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -50,7 +50,7 @@ export function TeachersCourses() {
                     : 'Sem descrição'}
                 </TableCell>
                 <TableCell>{course.is_published ? 'Sim' : 'Não'}</TableCell>
-                <TableCell>{course.chapters}</TableCell>
+                <TableCell>{course.modules}</TableCell>
                 <TableCell>
                   <div className="flex justify-end gap-2">
                     <Link to={`/teachers/courses/${course.id}`}>

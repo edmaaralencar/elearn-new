@@ -12,7 +12,9 @@ const envSchema = z.object({
   AWS_ACCESS_KEY_ID: z.string(),
   AWS_SECRET_ACCESS_KEY: z.string(),
   AWS_BUCKET_NAME: z.string(),
-  CLOUDFARE_ENDPOINT_URL: z.string()
+  CLOUDFARE_ENDPOINT_URL: z.string(),
+  STRIPE_PUBLISHABLE_KEY: z.string(),
+  STRIPE_SECRET_KEY: z.string()
 })
 
 const _env = envSchema.safeParse(process.env)

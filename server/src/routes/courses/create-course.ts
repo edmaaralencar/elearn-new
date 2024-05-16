@@ -38,7 +38,8 @@ export async function createCourse(app: FastifyInstance) {
           created_by: request.user.sub,
           type,
           technology,
-          slug: createSlugFromText(title)
+          slug: createSlugFromText(title),
+          is_published: 0
         })
         .returning('id')
         .executeTakeFirstOrThrow()

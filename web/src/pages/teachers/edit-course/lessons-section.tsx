@@ -1,17 +1,18 @@
-import { Section } from '.'
+import { PlusCircle } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
-import { PlusCircle, Trash } from 'lucide-react'
-import { ILesson } from '@/@types'
-import { DeleteModal } from '@/components/delete-modal'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteLesson } from '@/api/delete-lesson'
-import { toast } from 'sonner'
-import { useParams } from 'react-router-dom'
+import { Accordion } from '@/components/ui/accordion'
+
+import { ILesson, IModule } from '@/@types'
+
+import { Section } from '.'
+import { LessonAccordion } from './lesson-accordion'
 
 type LessonsSectionProps = {
   onSelectSection: (section: Section) => void
   initialData: {
     lessons: ILesson[]
+    modules: IModule[]
   }
 }
 
@@ -19,27 +20,6 @@ export function LessonsSection({
   onSelectSection,
   initialData
 }: LessonsSectionProps) {
-  const params = useParams<{ id: string }>()
-  const queryClient = useQueryClient()
-
-  const deleteLessonMutation = useMutation({
-    mutationFn: deleteLesson,
-    onMutate: () => {
-      toast.success('Deletando aula...')
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['courses', Number(params.id)]
-      })
-
-      toast.success('Aula deletada com sucesso.')
-    }
-  })
-
-  async function handleDeleteLesson(lesson_id: string) {
-    await deleteLessonMutation.mutateAsync(lesson_id)
-  }
-
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
@@ -56,28 +36,23 @@ export function LessonsSection({
         </Button>
       </div>
 
-      <div className="flex flex-col gap-4">
-        {initialData.lessons.map(item => (
-          <div
-            className="flex items-center justify-between border bg-muted/30 rounded-md text-sm py-2 px-4"
-            key={item.id}
-          >
-            <span className="text-sm">{item.title}</span>
-
-            <div className="">
-              <DeleteModal
-                title="Você tem certeza que deseja deletar a aula?"
-                description="Essa ação não pode ser desfeita e a aula será permanentemente deletado dos nosso servidores."
-                onConfirm={() => handleDeleteLesson(String(item.id))}
-                isLoading={deleteLessonMutation.isPending}
-              >
-                <Button size="xs" variant="outline">
-                  <Trash className="w-3 h-3" />
-                </Button>
-              </DeleteModal>
-            </div>
-          </div>
-        ))}
+      <div className="space-y-5 flex flex-col items-end">
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full flex flex-col gap-4"
+        >
+          {initialData.modules.map(module => (
+            <LessonAccordion
+              moduleTitle={module.title}
+              lessons={initialData.lessons.filter(
+                item => item.module_id === module.id
+              )}
+              key={module.id}
+              moduleId={module.id}
+            />
+          ))}
+        </Accordion>
       </div>
     </div>
   )

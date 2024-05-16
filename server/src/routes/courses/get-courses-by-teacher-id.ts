@@ -26,7 +26,7 @@ export async function getCoursesByTeacherid(app: FastifyInstance) {
                 coverImage: z.string().nullable(),
                 is_published: z.boolean().nullable(),
                 created_by: z.number(),
-                chapters: z.number(),
+                modules: z.number(),
                 technology: z.string()
               })
               .array()
@@ -49,9 +49,9 @@ export async function getCoursesByTeacherid(app: FastifyInstance) {
             select 
               count(*)
             from
-              chapters
-            where chapters.course_id = ${eb.ref('courses.id')}
-          )`.as('chapters')
+              modules
+            where modules.course_id = ${eb.ref('courses.id')}
+          )`.as('modules')
         ])
         .where('created_by', '==', request.user.sub)
         .execute()

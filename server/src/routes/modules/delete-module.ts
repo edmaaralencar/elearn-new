@@ -49,7 +49,7 @@ export async function deleteModule(app: FastifyInstance) {
 
       await db.transaction().execute(async tx => {
         await tx
-          .updateTable('chapters')
+          .updateTable('lessons')
           .set({
             module_id: -1
           })

@@ -19,23 +19,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute()
 
   await db.schema
-    .createTable('chapters')
-    .addColumn('id', 'integer', col =>
-      col.primaryKey().autoIncrement().notNull()
-    )
-    .addColumn('name', 'text', col => col.notNull())
-    .addColumn('position', 'integer', col => col.notNull())
-    .addColumn('slug', 'text', col => col.notNull())
-    .addColumn('is_published', 'boolean', col => col.notNull())
-    .addColumn('course_id', 'integer', col =>
-      col.references('courses.id').onDelete('cascade').notNull()
-    )
-    .addColumn('module_id', 'integer', col =>
-      col.references('modules.id').onDelete('cascade').notNull()
-    )
-    .execute()
-
-  await db.schema
     .createTable('lessons')
     .addColumn('id', 'integer', col =>
       col.primaryKey().autoIncrement().notNull()
@@ -54,9 +37,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('module_id', 'integer', col =>
       col.references('modules.id').onDelete('cascade').notNull()
     )
-    .addColumn('chapter_id', 'integer', col =>
-      col.references('chapters.id').onDelete('cascade').notNull()
-    )
     .execute()
 
   await db.schema
@@ -66,7 +46,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     )
     .addColumn('title', 'text', col => col.notNull())
     .addColumn('description', 'text', col => col.notNull())
-    .addColumn('is_published', 'boolean', col => col.defaultTo(false).notNull())
+    .addColumn('position', 'integer', col => col.notNull())
+    .addColumn('is_published', 'boolean', col => col.notNull())
     .addColumn('type', 'text', col => col.notNull())
     .addColumn('slug', 'text', col => col.notNull())
     .addColumn('course_id', 'integer', col =>
@@ -77,7 +58,6 @@ export async function up(db: Kysely<any>): Promise<void> {
 
 export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('courses').execute()
-  await db.schema.dropTable('chapters').execute()
   await db.schema.dropTable('lessons').execute()
   await db.schema.dropTable('modules').execute()
 }

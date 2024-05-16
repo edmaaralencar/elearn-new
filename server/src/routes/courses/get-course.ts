@@ -1,7 +1,9 @@
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 import { FastifyInstance } from 'fastify'
+
 import { db } from '@/db'
+
 import { BadRequest } from '@/errors/bad-request'
 
 export async function getCourse(app: FastifyInstance) {
@@ -28,21 +30,12 @@ export async function getCourse(app: FastifyInstance) {
                 slug: z.string()
               })
               .nullable(),
-            chapters: z.array(
-              z.object({
-                id: z.number(),
-                name: z.string(),
-                position: z.number(),
-                slug: z.string(),
-                module_id: z.number()
-              })
-            ),
             lessons: z.array(
               z.object({
                 asset_id: z.string(),
-                chapter_id: z.number(),
                 course_id: z.number(),
                 description: z.string(),
+                module_id: z.number(),
                 id: z.number(),
                 playback_id: z.string(),
                 title: z.string(),
@@ -57,7 +50,9 @@ export async function getCourse(app: FastifyInstance) {
                 description: z.string(),
                 type: z.string(),
                 id: z.number(),
+                position: z.number(),
                 course_id: z.number(),
+                is_published: z.boolean(),
                 slug: z.string()
               })
             )
@@ -77,12 +72,6 @@ export async function getCourse(app: FastifyInstance) {
       if (!course) {
         throw new BadRequest('Course does not exists.')
       }
-
-      const chapters = await db
-        .selectFrom('chapters')
-        .select(['id', 'slug', 'name', 'position', 'module_id'])
-        .where('chapters.course_id', '==', course.id)
-        .execute()
 
       const lessons = await db
         .selectFrom('lessons')
@@ -105,8 +94,10 @@ export async function getCourse(app: FastifyInstance) {
           ...course,
           is_published: course.is_published === 0 ? false : true
         },
-        chapters,
-        modules
+        modules: modules.map(module => ({
+          ...module,
+          is_published: module.is_published === 1
+        }))
       })
     }
   )

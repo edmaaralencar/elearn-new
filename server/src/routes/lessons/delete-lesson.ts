@@ -36,7 +36,7 @@ export async function deleteLesson(app: FastifyInstance) {
         .executeTakeFirst()
 
       if (!lessonExists) {
-        throw new BadRequest('Chapter does not exists.')
+        throw new BadRequest('Lesson does not exists.')
       }
 
       const isUserCourseOwner = await isUserOwnerOfTheCourse({

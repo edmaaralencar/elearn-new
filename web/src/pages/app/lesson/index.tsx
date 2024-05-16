@@ -1,11 +1,11 @@
-import { ChaptersSidebar } from './chapters-sidebar'
+import { ModulesSidebar } from './modules-sidebar'
 import { Content } from './content'
 
 export function AppLesson() {
   return (
-    <div className="-m-8 relative">
+    <div className="-m-8 flex">
       <Content />
-      <ChaptersSidebar />
+      <ModulesSidebar />
     </div>
   )
 }

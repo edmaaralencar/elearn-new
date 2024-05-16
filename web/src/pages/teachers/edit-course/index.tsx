@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Sidebar } from './sidebar'
 import { GeneralSection } from './general-section'
-import { ChaptersSection } from './chapters-section'
 import { useParams } from 'react-router-dom'
 import { useCourse } from '@/api/hooks/use-course'
 import { Loading } from '@/components/ui/loading'
@@ -10,12 +9,7 @@ import { CreateLessonSection } from './create-lesson-section'
 import { EditCourseHeader } from './edit-course-header'
 import { ModulesSection } from './modules-section'
 
-export type Section =
-  | 'general'
-  | 'chapters'
-  | 'lessons'
-  | 'create-lesson'
-  | 'modules'
+export type Section = 'general' | 'lessons' | 'create-lesson' | 'modules'
 
 export function EditCourse() {
   const params = useParams()
@@ -31,7 +25,7 @@ export function EditCourse() {
         <Loading />
       ) : (
         <EditCourseHeader
-          chapters={data.chapters}
+          modules={data.modules}
           course={data.course}
           lessons={data.lessons}
         />
@@ -60,25 +54,16 @@ export function EditCourse() {
                 }}
               />
             )}
-            {selectedSection === 'chapters' && (
-              <ChaptersSection
-                initialData={{
-                  chapters: data.chapters,
-                  lessons: data.lessons,
-                  modules: data.modules
-                }}
-              />
-            )}
             {selectedSection === 'lessons' && (
               <LessonsSection
                 onSelectSection={setSelectedSection}
-                initialData={{ lessons: data.lessons }}
+                initialData={{ lessons: data.lessons, modules: data.modules }}
               />
             )}
 
             {selectedSection === 'create-lesson' && (
               <CreateLessonSection
-                chapters={data.chapters}
+                modules={data.modules}
                 onSelectSection={setSelectedSection}
               />
             )}

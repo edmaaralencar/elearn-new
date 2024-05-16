@@ -1,5 +1,5 @@
-import { IChapter, ILesson } from '@/@types'
-import { deleteChapter } from '@/api/delete-chapter'
+import { ILesson } from '@/@types'
+import { deleteLesson } from '@/api/delete-lesson'
 import { reorderList } from '@/api/reorder-list'
 import { DeleteModal } from '@/components/delete-modal'
 import {
@@ -8,7 +8,7 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
-import { VisualizeChapterModal } from '@/components/visualize-chapter-modal'
+import { queryKeys } from '@/lib/react-query'
 import { cn } from '@/lib/utils'
 import {
   DragDropContext,
@@ -22,26 +22,24 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
-type ChapterAccordionProps = {
+type LessonAccordionProps = {
   moduleTitle: string
-  chapters: IChapter[]
   lessons: ILesson[]
   moduleId: number
 }
 
-export function ChapterAccordion({
+export function LessonAccordion({
   moduleTitle,
-  chapters: initialChapters,
-  lessons,
+  lessons: initialLessons,
   moduleId
-}: ChapterAccordionProps) {
-  const [chapters, setChapters] = useState<IChapter[]>([])
+}: LessonAccordionProps) {
+  const [lessons, setLessons] = useState<ILesson[]>([])
   const params = useParams()
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    setChapters([...initialChapters.sort((a, b) => a.position - b.position)])
-  }, [initialChapters])
+    setLessons([...initialLessons.sort((a, b) => a.position - b.position)])
+  }, [initialLessons])
 
   const reorderListMutation = useMutation({
     mutationFn: reorderList,
@@ -57,7 +55,7 @@ export function ChapterAccordion({
       return
     }
 
-    const items = Array.from(chapters)
+    const items = Array.from(lessons)
     const [reorderedItem] = items.splice(result.source.index, 1)
 
     items.splice(result.destination.index, 0, reorderedItem)
@@ -65,60 +63,60 @@ export function ChapterAccordion({
     const startIndex = Math.min(result.source.index, result.destination.index)
     const endIndex = Math.max(result.source.index, result.destination.index)
 
-    const updatedChapters = items.slice(startIndex, endIndex + 1)
+    const updatedLessons = items.slice(startIndex, endIndex + 1)
 
-    setChapters(items)
+    setLessons(items)
 
-    const bulkUpdateData = updatedChapters.map(chapter => ({
-      id: chapter.id,
-      position: items.findIndex(item => item.id === chapter.id)
+    const bulkUpdateData = updatedLessons.map(lesson => ({
+      id: lesson.id,
+      position: items.findIndex(item => item.id === lesson.id)
     }))
 
     await reorderListMutation.mutateAsync({
       list: bulkUpdateData,
-      type: 'CHAPTER',
+      type: 'LESSON',
       courseId: Number(params.id)
     })
   }
 
-  const deleteChapterMutation = useMutation({
-    mutationFn: deleteChapter,
+  const deleteLessonMutation = useMutation({
+    mutationFn: deleteLesson,
     onMutate: () => {
-      toast.success('Deletando capítulo...')
+      toast.success('Deletando aula...')
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['courses', Number(params.id)]
+        queryKey: queryKeys.course(String(params.id))
       })
 
-      toast.success('Capítulo deletado com sucesso.')
+      toast.success('Aula deletada com sucesso.')
     }
   })
 
-  async function handleDeleteChapter(chapter_id: string) {
-    await deleteChapterMutation.mutateAsync(chapter_id)
+  async function handleDeleteLesson(lesson_id: string) {
+    await deleteLessonMutation.mutateAsync(lesson_id)
   }
 
   return (
     <AccordionItem value={moduleId.toString()}>
       <AccordionTrigger>
-        <span className="font-medium">{moduleTitle}</span>
+        <span className="font-medium text-sm">Módulo: {moduleTitle}</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="-mb-4 p-4">
           <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="chapters">
+            <Droppable droppableId={`lessons-${moduleTitle}`}>
               {provided => (
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                   className="w-full"
                 >
-                  {chapters.map((chapter, index) => (
+                  {lessons.map((lesson, index) => (
                     <Draggable
                       index={index}
-                      key={chapter.id}
-                      draggableId={String(chapter.id)}
+                      key={lesson.id}
+                      draggableId={String(lesson.id)}
                     >
                       {provided => (
                         <div
@@ -138,24 +136,18 @@ export function ChapterAccordion({
                           </div>
 
                           <div className="flex justify-between items-center w-full pr-2">
-                            <span className="text-sm block flex-1">
-                              {chapter.name}
+                            <span className="text-xs block flex-1">
+                              {lesson.title}
                             </span>
 
                             <div className="flex items-center gap-1">
-                              <VisualizeChapterModal
-                                chapter={chapter}
-                                lessons={lessons.filter(
-                                  item => item.chapter_id === chapter.id
-                                )}
-                              />
                               <DeleteModal
                                 title="Você tem certeza que deseja deletar o capítulo?"
                                 description="Essa ação não pode ser desfeita e o capítulo será permanentemente deletado dos nosso servidores, bem como todas as vídeos aulas atríbuidas a esse capítulos serão desvinculadas."
                                 onConfirm={() =>
-                                  handleDeleteChapter(String(chapter.id))
+                                  handleDeleteLesson(String(lesson.id))
                                 }
-                                isLoading={deleteChapterMutation.isPending}
+                                isLoading={deleteLessonMutation.isPending}
                               >
                                 <Button size="xs" variant="outline">
                                   <Trash className="w-3 h-3" />
@@ -174,22 +166,6 @@ export function ChapterAccordion({
             </Droppable>
           </DragDropContext>
         </div>
-        {/* <div className="p-2 flex flex-col gap-1">
-                  {initialData.chapters
-                    .filter(chapter => chapter.module_id === module.id)
-                    .map(chapter => (
-                      <Link
-                        className="flex p-2 items-center justify-between hover:bg-muted/80 transition-all rounded-md"
-                        to="/"
-                        key={chapter.id}
-                      >
-                        <div className="flex gap-2 items-center">
-                          <Video className="w-4 h-4" />
-                          <h4>{chapter.name}</h4>
-                        </div>
-                      </Link>
-                    ))}
-                </div> */}
       </AccordionContent>
     </AccordionItem>
   )

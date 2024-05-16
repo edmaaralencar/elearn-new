@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Component,
-  LayoutDashboard,
-  LucideIcon,
-  Video,
-  Activity
-} from 'lucide-react'
+import { LayoutDashboard, LucideIcon, Video, Activity } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { Section } from '.'
@@ -16,11 +10,6 @@ const options: { label: string; section: Section; icon: LucideIcon }[] = [
     label: 'Geral',
     section: 'general',
     icon: LayoutDashboard
-  },
-  {
-    label: 'Capitulos',
-    section: 'chapters',
-    icon: Component
   },
   {
     label: 'Aulas',

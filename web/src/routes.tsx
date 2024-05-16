@@ -14,8 +14,21 @@ import { AppCourses } from './pages/app/courses'
 import { AppCourse } from './pages/app/course'
 import { AppModule } from './pages/app/module'
 import { AppLesson } from './pages/app/lesson'
+import { AdminTeachers } from './pages/admin/teachers'
+import { GeneratePassword } from './pages/auth/generate-password'
+import { Home } from './pages/home'
+import { Checkout } from './pages/checkout'
+import { AppForums } from './pages/app/forums'
 
 export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />
+  },
+  {
+    path: '/checkout',
+    element: <Checkout />
+  },
   {
     path: '/',
     element: <AuthLayout />,
@@ -31,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: '/verification-code',
         element: <VerificationCode />
+      },
+      {
+        path: '/generate-password',
+        element: <GeneratePassword />
       }
     ]
   },
@@ -57,6 +74,10 @@ export const router = createBrowserRouter([
       {
         path: '/app/modules/:id/lessons/:slug',
         element: <AppLesson />
+      },
+      {
+        path: '/app/forums',
+        element: <AppForums />
       }
     ]
   },
@@ -67,6 +88,10 @@ export const router = createBrowserRouter([
       {
         path: '*',
         element: <AppHome />
+      },
+      {
+        path: '/admin/teachers',
+        element: <AdminTeachers />
       }
     ]
   },

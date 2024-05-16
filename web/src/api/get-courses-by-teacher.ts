@@ -8,7 +8,7 @@ type Response = {
     coverImage: string | null
     created_by: number
     is_published: boolean | null
-    chapters: number
+    modules: number
   }[]
 }
 

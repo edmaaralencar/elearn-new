@@ -1,4 +1,4 @@
-import { IChapter, ICourse, ILesson } from '@/@types'
+import { ICourse, ILesson, IModule } from '@/@types'
 import { Button } from '@/components/ui/button'
 import {
   HoverCard,
@@ -8,20 +8,20 @@ import {
 
 type EditCourseHeaderProps = {
   course: ICourse
-  chapters: IChapter[]
+  modules: IModule[]
   lessons: ILesson[]
 }
 
 export function EditCourseHeader({
   course,
-  chapters,
+  modules,
   lessons
 }: EditCourseHeaderProps) {
   const fields = [
     course.coverImage,
     course.title,
     course.description,
-    chapters.length > 0,
+    modules.length > 0,
     lessons.length > 0
   ]
 

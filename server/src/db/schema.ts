@@ -4,16 +4,6 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>
 
-export interface Chapters {
-  course_id: number
-  id: Generated<number>
-  is_published: number
-  module_id: number
-  name: string
-  position: number
-  slug: string
-}
-
 export interface Courses {
   coverImage: string | null
   created_by: number
@@ -28,7 +18,6 @@ export interface Courses {
 
 export interface Lessons {
   asset_id: string
-  chapter_id: number
   course_id: number
   description: string
   duration: string
@@ -45,7 +34,8 @@ export interface Modules {
   course_id: number
   description: string
   id: Generated<number>
-  is_published: Generated<number>
+  is_published: number
+  position: number
   slug: string
   title: string
   type: string
@@ -57,7 +47,7 @@ export interface Users {
   email_verified: string | null
   id: Generated<number | null>
   name: string
-  password: string
+  password: string | null
   role: Generated<string>
 }
 
@@ -77,7 +67,6 @@ export interface VerificationCodes {
 }
 
 export interface DB {
-  chapters: Chapters
   courses: Courses
   lessons: Lessons
   modules: Modules

@@ -1,14 +1,6 @@
-export interface IChapter {
-  course_id: number
-  module_id: number
-  id: number
-  name: string
-  position: number
-}
-
 export interface ILesson {
   asset_id: string
-  chapter_id: number
+  module_id: number
   course_id: number
   description: string
   id: number
@@ -31,12 +23,14 @@ export interface ICourse {
 }
 
 export interface IModule {
-  id: number
-  type: string
-  title: string
-  description: string
   course_id: number
+  description: string
+  id: number
+  is_published: number
+  position: number
   slug: string
+  title: string
+  type: string
 }
 
 export interface IUserProgress {

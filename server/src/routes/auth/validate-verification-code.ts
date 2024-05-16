@@ -32,7 +32,7 @@ export async function validateVerificationCode(app: FastifyInstance) {
         .executeTakeFirst()
 
       if (!userExists) {
-        throw new BadRequest('User does not exists.')
+        throw new BadRequest('Teacher does not exists.')
       }
 
       const verificationCode = await db

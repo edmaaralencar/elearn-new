@@ -77,8 +77,8 @@ export function Content() {
   }
 
   return (
-    <div className="w-[calc(100%-270px)] flex flex-col">
-      <div className="relative aspect-video">
+    <div className="flex flex-col w-full">
+      <div className="relative h-[250px] sm:h-[300px] md:h-[400px] lg:h-[550px]">
         {!isReady && (
           <div className="absolute inset-0 flex items-center justify-center bg-slate-800">
             <Loading className="w-8 h-8" />
@@ -91,7 +91,7 @@ export function Content() {
           onEnded={onEnded}
           playbackId={lessonInfo.lesson.playback_id}
           onCanPlay={() => setIsReady(true)}
-          className={cn(!isReady && 'hidden')}
+          className={cn('h-full w-full', !isReady && 'hidden')}
         />
       </div>
 

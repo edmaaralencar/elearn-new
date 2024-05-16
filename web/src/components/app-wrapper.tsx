@@ -20,16 +20,22 @@ export function AppWrapper({ items, allowedRoles }: AppWrapperProps) {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
-  const { data: profile } = useProfile()
+  const { data: profile, isFetched } = useProfile()
 
   useLayoutEffect(() => {
+    if (isFetched) {
+      return
+    }
+
     setIsLoading(true)
+
     const interceptorId = api.interceptors.response.use(
       response => {
+        console.log({ response })
         setIsLoading(false)
         return response
       },
-      error => {
+      async error => {
         if (isAxiosError(error)) {
           const status = error.response?.status
           const message = error.response?.data.message
@@ -46,11 +52,11 @@ export function AppWrapper({ items, allowedRoles }: AppWrapperProps) {
       }
     )
 
-    // Clean up the side effect when the component unmounts
     return () => {
       api.interceptors.response.eject(interceptorId)
+      setIsLoading(false)
     }
-  }, [navigate])
+  }, [isFetched, navigate])
 
   if (isLoading || !profile) {
     return (
@@ -75,9 +81,9 @@ export function AppWrapper({ items, allowedRoles }: AppWrapperProps) {
   return (
     <main className="flex flex-col">
       <Header />
-      <div className="grid h-full w-full md:grid-cols-[190px_1fr]">
+      <div className="grid w-full md:grid-cols-[190px_1fr]">
         <Sidebar items={items} />
-        <section className="h-full w-full overflow-y-scroll p-8">
+        <section className="p-8">
           <Outlet />
         </section>
       </div>

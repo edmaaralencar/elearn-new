@@ -53,6 +53,10 @@ export async function authenticate(app: FastifyInstance) {
         throw new BadRequest('Email has not been verified.')
       }
 
+      if (!userExists.password) {
+        throw new BadRequest('User has not created a password yet.')
+      }
+
       const passwordMatches = await compare(password, userExists.password)
 
       if (!passwordMatches) {

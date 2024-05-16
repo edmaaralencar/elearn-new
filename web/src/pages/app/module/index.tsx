@@ -1,13 +1,13 @@
 import { useParams, Navigate } from 'react-router-dom'
 
-import { useChaptersByModule } from '@/api/hooks/use-chapters-by-module'
+import { useLessonsByModule } from '@/api/hooks/use-lessons-by-module'
 
 import { Loading } from '@/components/ui/loading'
 
 export function AppModule() {
   const params = useParams<{ id: string }>()
 
-  const { data, error, isLoading } = useChaptersByModule(params.id ?? '')
+  const { data, error, isLoading } = useLessonsByModule(params.id ?? '')
 
   if (error) {
     return <Navigate to="/app/courses" />
@@ -25,14 +25,11 @@ export function AppModule() {
     )
   }
 
-  if (data.chapters[0].lessons.length === 0) {
-    return <Navigate to="/app/courses" />
-  }
+  console.log(data)
 
-  return (
-    <Navigate
-      to={`/app/modules/${params.id}/lessons/${data.chapters[0].lessons[0].slug}`}
-      replace
-    />
-  )
+  // if (data.chapters[0].lessons.length === 0) {
+  //   return <Navigate to="/app/courses" />
+  // }
+
+  return <Navigate to={`/app/modules/${params.id}/lessons/${data[0].slug}`} />
 }

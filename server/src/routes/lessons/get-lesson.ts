@@ -18,7 +18,7 @@ export async function getLesson(app: FastifyInstance) {
           200: z.object({
             lesson: z.object({
               asset_id: z.string(),
-              chapter_id: z.number(),
+              module_id: z.number(),
               course_id: z.number(),
               description: z.string(),
               id: z.number(),

@@ -5,7 +5,7 @@ type Params = {
     id: number
     position: number
   }>
-  type: 'CHAPTER' | 'LESSON'
+  type: 'MODULE' | 'LESSON'
   courseId: number
 }
 
